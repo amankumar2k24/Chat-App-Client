@@ -1,15 +1,35 @@
 "use client";
-import useLogout from "@/hooks/useLogout";
+import AuthContext from "@/context/AuthContext";
+import { userLogoutQuery } from "@/lib/hooks/authHooks";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import toast from "react-hot-toast";
 import { BiLogOut } from "react-icons/bi";
 
 const LogoutButton = () => {
   const router = useRouter();
-  const { loading, logout } = useLogout();
+  const { setAuthUser } = useContext(AuthContext);
+
+  const onUserLogoutSuccess = () => {
+    toast.success("Logout successfully");
+    router.push("/login");
+    localStorage.removeItem("chat-user");
+    setAuthUser(null);
+  };
+
+  const onUserLogoutError = (error) => {
+    router.push("/login");
+    console.log(error);
+  };
+
+  const { mutateAsync: logout, isLoading } = userLogoutQuery(
+    onUserLogoutSuccess,
+    onUserLogoutError
+  );
 
   return (
     <div className="mt-auto">
-      {!loading ? (
+      {!isLoading ? (
         <BiLogOut
           className="w-6 h-6 text-white cursor-pointer"
           onClick={() => {

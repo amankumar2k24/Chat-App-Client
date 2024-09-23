@@ -1,42 +1,64 @@
 "use client";
 import Link from "next/link";
-import useSignup from "@/hooks/useSignup";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import GenderCheckbox from "./GenderCheckbox";
 import { useRouter } from "next/navigation";
-import AuthContext from "@/context/AuthContext";
+import { useMutation } from "react-query";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import { userRegisterQuery } from "@/lib/hooks/authHooks";
+import toast from "react-hot-toast";
+import { validateXSS } from "@/utils/validateXSS";
 
-const page = () => {
-  const { authUser } = useContext(AuthContext);
+const Register = () => {
+  const [togglePassword, setTogglePassword] = useState(false);
   const router = useRouter();
-  const [inputs, setInputs] = useState({
-    fullName: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
-    gender: "",
+
+  const onUserRegisterSucess = () => {
+    toast.success("User registered successfully");
+    router.push("/login");
+  };
+
+  const onUserRegisterError = (error) => {
+    const errorMessage = error.response.data.message;
+
+    if (errorMessage.includes("username")) {
+      setFieldError("username", errorMessage);
+    } else if (errorMessage.includes("password")) {
+      setFieldError("password", errorMessage);
+    } else {
+      toast.error(error.response.data.message);
+    }
+  };
+
+  const { mutateAsync: register, isLoading } = useMutation(userRegisterQuery, {
+    onSucess: onUserRegisterSucess,
+    onError: onUserRegisterError,
   });
 
-  const { loading, signup } = useSignup();
-
-  useEffect(() => {
-    if (authUser) {
-      router.push("/");
-    }
-  }, [authUser, router]);
-
-  if (authUser) {
-    return null;
-  }
-
-  const handleCheckboxChange = (gender) => {
-    setInputs({ ...inputs, gender });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await signup(inputs);
-  };
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    setFieldError,
+    setFieldValue,
+  } = useFormik({
+    initialValues: {
+      fullName: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
+      gender: "",
+    },
+    validationSchema: registerSchema,
+    onSubmit: async (values) => {
+      await register({ formData: values });
+    },
+  });
 
   return (
     <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
@@ -52,13 +74,19 @@ const page = () => {
             </label>
             <input
               type="text"
-              placeholder="John Doe"
+              placeholder="Enter your full name"
               className="w-full input input-bordered  h-10"
-              value={inputs.fullName}
-              onChange={(e) =>
-                setInputs({ ...inputs, fullName: e.target.value })
-              }
+              name="fullName"
+              id="fullName"
+              value={values.fullName}
+              onBlur={handleBlur}
+              onChange={handleChange}
             />
+            {errors?.fullName && touched?.fullName ? (
+              <div className="text-red-700">{errors?.fullName}</div>
+            ) : (
+              ""
+            )}
           </div>
 
           <div>
@@ -67,49 +95,90 @@ const page = () => {
             </label>
             <input
               type="text"
-              placeholder="johndoe"
+              placeholder="Enter your username"
               className="w-full input input-bordered h-10"
-              value={inputs.username}
-              onChange={(e) =>
-                setInputs({ ...inputs, username: e.target.value })
-              }
+              name="username"
+              id="username"
+              value={values.username}
+              onBlur={handleBlur}
+              onChange={handleChange}
             />
+            {errors?.username && touched?.username ? (
+              <div className="text-red-700">{errors?.username}</div>
+            ) : (
+              ""
+            )}
           </div>
 
           <div>
             <label className="label">
               <span className="text-base label-text">Password</span>
             </label>
-            <input
-              type="password"
-              placeholder="Enter Password"
-              className="w-full input input-bordered h-10"
-              value={inputs.password}
-              onChange={(e) =>
-                setInputs({ ...inputs, password: e.target.value })
-              }
-            />
+            <div className="relative">
+              <input
+                type={togglePassword ? "text" : "password"}
+                placeholder="Enter Password"
+                className="w-full input input-bordered h-10"
+                name="password"
+                id="password"
+                value={values.password}
+                onBlur={handleBlur}
+                onChange={handleChange}
+              />
+              <button
+                type="button"
+                onClick={() => setTogglePassword(!togglePassword)}
+              >
+                {togglePassword ? (
+                  <IoIosEye size={20} className="absolute top-2 right-2" />
+                ) : (
+                  <IoIosEyeOff size={20} className="absolute top-2 right-2" />
+                )}
+              </button>
+              {errors?.password && touched?.password ? (
+                <div className="text-red-700">{errors?.password}</div>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
 
           <div>
             <label className="label">
               <span className="text-base label-text">Confirm Password</span>
             </label>
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              className="w-full input input-bordered h-10"
-              value={inputs.confirmPassword}
-              onChange={(e) =>
-                setInputs({ ...inputs, confirmPassword: e.target.value })
-              }
-            />
+            <div className="relative">
+              <input
+                type={"password"}
+                placeholder="Enter Password"
+                className="w-full input input-bordered h-10"
+                name="confirmPassword"
+                id="confirmPassword"
+                value={values.confirmPassword}
+                onBlur={handleBlur}
+                onChange={handleChange}
+              />
+              <button
+                type="button"
+                onClick={() => setTogglePassword(!togglePassword)}
+              ></button>
+              {errors?.confirmPassword && touched?.confirmPassword ? (
+                <div className="text-red-700">{errors?.confirmPassword}</div>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
 
           <GenderCheckbox
-            onCheckboxChange={handleCheckboxChange}
-            selectedGender={inputs.gender}
+            onCheckboxChange={(gender) => setFieldValue("gender", gender)}
+            selectedGender={values.gender}
+            errors={errors}
+            touched={touched}
           />
+          {touched.gender && errors.gender && (
+            <div className="text-red-700 -mt-2">{errors.gender}</div>
+          )}
 
           <Link
             href={"/login"}
@@ -120,10 +189,12 @@ const page = () => {
 
           <div>
             <button
+              type="submit"
+              onClick={handleSubmit}
               className="btn btn-block btn-sm mt-2 border border-slate-700"
-              disabled={loading}
+              disabled={isLoading}
             >
-              {loading ? (
+              {isLoading ? (
                 <span className="loading loading-spinner"></span>
               ) : (
                 "Sign Up"
@@ -136,4 +207,17 @@ const page = () => {
   );
 };
 
-export default page;
+export default Register;
+
+export const registerSchema = Yup.object({
+  fullName: Yup.string().required("Fullname is required"),
+  username: Yup.string().required("Username is required"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters")
+    .required("Password is required"),
+  gender: Yup.string().required("Please select any gender"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .required("Required")
+    .test("xss", "XSS Attack Detected", validateXSS),
+});

@@ -1,45 +1,42 @@
 "use client";
 import AuthContext from "@/context/AuthContext";
-// import useLogin from "@/hooks/useLogin";
-
-import { useFormik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { useMutation } from "react-query";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
-import { userLogin } from "@/lib/hooks/authHooks";
+import { userLoginQuery } from "@/lib/hooks/authHooks";
 import toast from "react-hot-toast";
 
-const page = () => {
+const Login = () => {
   const [togglePassword, setTogglePassword] = useState(false);
-  const { authUser } = useContext(AuthContext);
-  console.log("authUser from Login page", authUser);
+  const { authUser, setAuthUser } = useContext(AuthContext);
+  console.log("authUser=>", authUser);
   const router = useRouter();
-  // const { loading, login } = useLogin();
-
-  // useEffect(() => {
-  //   if (authUser) {
-  //     router.push("/");
-  //   }
-  // }, [authUser, router]);
-
-  // if (authUser) {
-  //   return null;
-  // }
 
   const onUserLoginSuccess = (data) => {
-    console.log("Login success", data);
+    localStorage.setItem("chat-user", JSON.stringify(data));
+    setAuthUser(data);
     router.push("/");
+    toast.success(data?.data?.message);
   };
 
   const onUserLoginError = (error) => {
-    toast.error(error.response.data.message);
+    const errorMessage = error.response?.data?.message || "Login failed";
+
+    if (errorMessage.includes("username")) {
+      setFieldError("username", errorMessage);
+    } else if (errorMessage.includes("password")) {
+      setFieldError("password", errorMessage);
+    } else {
+      toast.error(errorMessage);
+    }
     console.log("Login error", error);
   };
 
-  const { mutate: login, isLoading } = useMutation(userLogin, {
+  const { mutate: login, isLoading } = useMutation(userLoginQuery, {
     onSuccess: onUserLoginSuccess,
     onError: onUserLoginError,
   });
@@ -52,6 +49,7 @@ const page = () => {
     touched,
     handleSubmit,
     isSubmitting,
+    setFieldError,
   } = useFormik({
     initialValues: {
       username: "",
@@ -59,7 +57,6 @@ const page = () => {
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
-      console.log("Submitting values", values);
       login({ formData: values });
     },
   });
@@ -93,7 +90,6 @@ const page = () => {
               ""
             )}
           </div>
-
           <div>
             <label className="label">
               <span className="text-base label-text">Password</span>
@@ -153,7 +149,7 @@ const page = () => {
   );
 };
 
-export default page;
+export default Login;
 
 export const loginSchema = Yup.object({
   username: Yup.string().required("Please enter username"),
