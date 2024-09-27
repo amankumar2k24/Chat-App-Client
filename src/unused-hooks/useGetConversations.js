@@ -1,33 +1,34 @@
-"use client";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+// "use client";
+// import { useEffect, useState } from "react";
+// import toast from "react-hot-toast";
 
-const useGetConversations = () => {
-  const [loading, setLoading] = useState(false);
-  const [conversations, setConversations] = useState([]);
+// const useGetConversations = () => {
+//   const [loading, setLoading] = useState(false);
+//   const [conversations, setConversations] = useState([]);
 
-  useEffect(() => {
-    const getConversations = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/user/get-users`
-        );
-        const data = await res.json();
-        if (data.error) {
-          throw new Error(data.error);
-        }
-        setConversations(data);
-      } catch (error) {
-        toast.error(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+//   useEffect(() => {
+//     const getConversations = async () => {
+//       setLoading(true);
+//       try {
+//         const res = await fetch(
+//           `${process.env.NEXT_PUBLIC_API_URL}/user/get-users`
+//         );
+//         console.log("res from conversations", res);
+//         const data = await res.json();
+//         if (data.error) {
+//           throw new Error(data.error);
+//         }
+//         setConversations(data);
+//       } catch (error) {
+//         toast.error(error.message);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
 
-    getConversations();
-  }, []);
+//     getConversations();
+//   }, []);
 
-  return { loading, conversations };
-};
-export default useGetConversations;
+//   return { loading, conversations };
+// };
+// export default useGetConversations;

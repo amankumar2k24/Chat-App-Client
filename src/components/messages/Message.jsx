@@ -5,6 +5,7 @@ import useConversation from "@/zustand/useConversation";
 import { useContext } from "react";
 
 const Message = ({ message }) => {
+  console.log("message from simple message", message);
   const { authUser } = useContext(AuthContext);
   const { selectedConversation } = useConversation();
   const fromMe = message.senderId === authUser._id;
@@ -27,7 +28,7 @@ const Message = ({ message }) => {
       <div
         className={`chat-bubble text-white ${bubbleBgColor} ${shakeClass} pb-2`}
       >
-        {message.message}
+        {message?.message}
       </div>
       <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">
         {formattedTime}

@@ -15,7 +15,7 @@ const Register = () => {
   const [togglePassword, setTogglePassword] = useState(false);
   const router = useRouter();
 
-  const onUserRegisterSucess = () => {
+  const onUserRegisterSuccess = (data) => {
     toast.success("User registered successfully");
     router.push("/login");
   };
@@ -33,7 +33,7 @@ const Register = () => {
   };
 
   const { mutateAsync: register, isLoading } = useMutation(userRegisterQuery, {
-    onSucess: onUserRegisterSucess,
+    onSuccess: onUserRegisterSuccess,
     onError: onUserRegisterError,
   });
 

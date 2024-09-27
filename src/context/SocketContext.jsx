@@ -1,46 +1,54 @@
 "use client";
-import { createContext, useState, useEffect, useContext } from "react";
-import AuthContext from "./AuthContext";
+import { createContext, useContext, useEffect, useState } from "react";
 import io from "socket.io-client";
+import AuthContext from "./AuthContext";
 
-const SocketContext = createContext();
-
-export const useSocketContext = () => {
-  return useContext(SocketContext);
-};
+export const SocketContext = createContext();
 
 export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
+  // console.log("socket from socketio", socket);
   const [onlineUsers, setOnlineUsers] = useState([]);
+
   const { authUser } = useContext(AuthContext);
 
-  // useEffect(() => {
-  //   if (authUser) {
-  //     const socket = io("https://chat-app-yt.onrender.com", {
-  //       query: {
-  //         userId: authUser._id,
-  //       },
-  //     });
+  // console.log("authUser from socketio", authUser);
 
-  //     setSocket(socket);
+  useEffect(() => {
+    if (authUser) {
+      const socket = io("http://localhost:8000", {
+        query: { userId: authUser.data.result._id },
+      });
+      setSocket(socket);
 
-  //     // socket.on() is used to listen to the events. can be used both on client and server side
-  //     socket.on("getOnlineUsers", (users) => {
-  //       setOnlineUsers(users);
-  //     });
+      console.log("Socket connected:", socket.connected);
 
-  //     return () => socket.close();
-  //   } else {
-  //     if (socket) {
-  //       socket.close();
-  //       setSocket(null);
-  //     }
-  //   }
-  // }, [authUser]);
+      //socket.on() is used to listen to the event emitted by the server
+      socket.on("getOnlineUsers", (users) => {
+        setOnlineUsers(users);
+      });
+
+      return () => socket.close();
+    } else {
+      if (socket) {
+        socket.close();
+        setSocket(null);
+      }
+    }
+  }, [authUser]);
 
   return (
-    <SocketContext.Provider value={{ socket, onlineUsers }}>
+    <SocketContext.Provider
+      value={{
+        socket,
+        setSocket,
+        onlineUsers,
+        setOnlineUsers,
+      }}
+    >
       {children}
     </SocketContext.Provider>
   );
 };
+
+export default SocketContext;

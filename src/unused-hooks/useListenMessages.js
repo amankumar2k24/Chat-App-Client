@@ -1,11 +1,11 @@
 "use client";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import notificationSound from "../public/sounds/notification.mp3";
-import { useSocketContext } from "@/context/SocketContext";
 import useConversation from "@/zustand/useConversation";
+import { SocketContext } from "@/context/SocketContext";
 
 const useListenMessages = () => {
-  const { socket } = useSocketContext();
+  const { socket } = useContext(SocketContext);
   const { messages, setMessages } = useConversation();
 
   useEffect(() => {

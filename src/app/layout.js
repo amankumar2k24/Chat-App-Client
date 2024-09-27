@@ -1,10 +1,10 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import { AuthContextProvider } from "@/context/AuthContext";
-import { SocketContextProvider } from "@/context/SocketContext";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { Providers } from "@/provider/Providers";
 import { Suspense } from "react";
+import { AuthContextProvider } from "@/context/AuthContext";
+import SocketProvider, { SocketContextProvider } from "@/context/SocketContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

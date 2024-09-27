@@ -13,7 +13,6 @@ import toast from "react-hot-toast";
 const Login = () => {
   const [togglePassword, setTogglePassword] = useState(false);
   const { authUser, setAuthUser } = useContext(AuthContext);
-  console.log("authUser=>", authUser);
   const router = useRouter();
 
   const onUserLoginSuccess = (data) => {

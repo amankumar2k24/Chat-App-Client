@@ -1,34 +1,59 @@
 "use client";
-import useSendMessage from "@/unused-hooks/useSendMessage";
+import { sendUserConversation } from "@/lib/hooks/userHooks";
+import useConversation from "@/zustand/useConversation";
+import { useFormik } from "formik";
 import { useState } from "react";
 import { BsSend } from "react-icons/bs";
+import { useMutation } from "react-query";
 
 const MessageInput = () => {
-  const [message, setMessage] = useState("");
-  const { loading, sendMessage } = useSendMessage();
+  const { selectedConversation, messages, setMessages } = useConversation();
+  console.log("selectedConversation=>", selectedConversation);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!message) return;
-    await sendMessage(message);
-    setMessage("");
+  const onSuccess = (data) => {
+    console.log("data from onsuccess=>", data);
+    setMessages([...messages, data.result]);
   };
+  const onError = (error) => {
+    console.log(error);
+  };
+
+  const { mutate: sendMessageToFrnd, isLoading } = useMutation(
+    sendUserConversation,
+    {
+      onSuccess,
+      onError,
+    }
+  );
+
+  const { values, handleChange, handleSubmit } = useFormik({
+    initialValues: {
+      message: "",
+    },
+    onSubmit: (values) => {
+      sendMessageToFrnd({
+        message: values.message, // Corrected to "message"
+        id: selectedConversation._id,
+      });
+    },
+  });
 
   return (
     <form className="px-4 my-3" onSubmit={handleSubmit}>
       <div className="w-full relative">
         <input
           type="text"
+          name="message"
           className="border text-sm rounded-lg block w-full p-2.5  bg-gray-700 border-gray-600 text-white"
           placeholder="Send a message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={values.message}
+          onChange={handleChange}
         />
         <button
           type="submit"
           className="absolute inset-y-0 end-0 flex items-center pe-3"
         >
-          {loading ? (
+          {isLoading ? (
             <div className="loading loading-spinner"></div>
           ) : (
             <BsSend />

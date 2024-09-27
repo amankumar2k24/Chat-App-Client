@@ -1,11 +1,27 @@
 import { useEffect, useRef } from "react";
-import useGetMessages from "../../unused-hooks/useGetMessages";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
 import Message from "./Message";
 import useListenMessages from "../../unused-hooks/useListenMessages";
+import useConversation from "@/zustand/useConversation";
+import { useGetUsersMessageQuery } from "@/lib/hooks/userHooks";
 
 const Messages = () => {
-  const { messages, loading } = useGetMessages();
+  const { selectedConversation, messages, setMessages } = useConversation();
+
+  const onGetUserMessageSuccess = (data) => {
+    setMessages(data?.result);
+  };
+
+  const onGetUserMessageError = (error) => {
+    console.log(error);
+  };
+
+  const { data, loading } = useGetUsersMessageQuery(
+    selectedConversation._id,
+    onGetUserMessageSuccess,
+    onGetUserMessageError
+  );
+
   useListenMessages();
   const lastMessageRef = useRef();
 
@@ -18,15 +34,15 @@ const Messages = () => {
   return (
     <div className="px-4 flex-1 overflow-auto">
       {!loading &&
-        messages.length > 0 &&
-        messages.map((message) => (
+        messages?.length > 0 &&
+        messages?.map((message) => (
           <div key={message._id} ref={lastMessageRef}>
             <Message message={message} />
           </div>
         ))}
 
       {loading && [...Array(3)].map((_, idx) => <MessageSkeleton key={idx} />)}
-      {!loading && messages.length === 0 && (
+      {!loading && messages?.length === 0 && (
         <p className="text-center">Send a message to start the conversation</p>
       )}
     </div>

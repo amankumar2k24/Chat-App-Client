@@ -8,7 +8,6 @@ export const userLoginQuery = async ({ formData }) => {
     formData,
     { withCredentials: true }
   );
-  console.log("response coming from userLogin APi", response);
   return response;
 };
 
@@ -19,7 +18,6 @@ export const userRegisterQuery = async ({ formData }) => {
     formData,
     { withCredentials: true }
   );
-  console.log("response coming from userRegister APi", response);
   return response;
 };
 
