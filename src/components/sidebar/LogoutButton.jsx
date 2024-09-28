@@ -1,6 +1,6 @@
 "use client";
 import AuthContext from "@/context/AuthContext";
-import { userLogoutQuery } from "@/lib/hooks/authHooks";
+import { useUserLogout } from "@/lib/hooks/authHooks";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import toast from "react-hot-toast";
@@ -22,7 +22,7 @@ const LogoutButton = () => {
     console.log(error);
   };
 
-  const { mutateAsync: logout, isLoading } = userLogoutQuery(
+  const { mutateAsync: logout, isLoading } = useUserLogout(
     onUserLogoutSuccess,
     onUserLogoutError
   );

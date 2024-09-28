@@ -2,17 +2,17 @@
 import AuthContext from "@/context/AuthContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useMutation } from "react-query";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
-import { userLoginQuery } from "@/lib/hooks/authHooks";
+import { useUserLogin } from "@/lib/hooks/authHooks";
 import toast from "react-hot-toast";
 
 const Login = () => {
   const [togglePassword, setTogglePassword] = useState(false);
-  const { authUser, setAuthUser, setHideSideBar } = useContext(AuthContext);
+  const { setAuthUser, setHideSideBar } = useContext(AuthContext);
   const router = useRouter();
 
   const onUserLoginSuccess = (data) => {
@@ -37,7 +37,7 @@ const Login = () => {
     console.log("Login error", error);
   };
 
-  const { mutate: login, isLoading } = useMutation(userLoginQuery, {
+  const { mutate: login, isLoading } = useMutation(useUserLogin, {
     onSuccess: onUserLoginSuccess,
     onError: onUserLoginError,
   });

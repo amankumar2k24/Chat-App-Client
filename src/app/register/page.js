@@ -7,7 +7,7 @@ import { useMutation } from "react-query";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
-import { userRegisterQuery } from "@/lib/hooks/authHooks";
+import { useUserRegister } from "@/lib/hooks/authHooks";
 import toast from "react-hot-toast";
 import { validateXSS } from "@/utils/validateXSS";
 
@@ -32,7 +32,7 @@ const Register = () => {
     }
   };
 
-  const { mutateAsync: register, isLoading } = useMutation(userRegisterQuery, {
+  const { mutateAsync: register, isLoading } = useMutation(useUserRegister, {
     onSuccess: onUserRegisterSuccess,
     onError: onUserRegisterError,
   });

@@ -2,7 +2,7 @@ import { useMutation } from "react-query";
 import axiosInterceptor from "../interceptor/axiosInterceptor";
 
 //login
-export const userLoginQuery = async ({ formData }) => {
+export const useUserLogin = async ({ formData }) => {
   const response = await axiosInterceptor.post(
     `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
     formData,
@@ -12,7 +12,7 @@ export const userLoginQuery = async ({ formData }) => {
 };
 
 //register
-export const userRegisterQuery = async ({ formData }) => {
+export const useUserRegister = async ({ formData }) => {
   const response = await axiosInterceptor.post(
     `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
     formData,
@@ -33,7 +33,7 @@ const logout = async () => {
   return response;
 };
 
-export const userLogoutQuery = (onUserLogoutSuccess, onUserLogoutError) => {
+export const useUserLogout = (onUserLogoutSuccess, onUserLogoutError) => {
   return useMutation(logout, {
     onSuccess: onUserLogoutSuccess,
     onError: onUserLogoutError,
