@@ -9,25 +9,28 @@ body {
 	background-position: center;
 }
 
-/* dark mode looking scrollbar */
-::-webkit-scrollbar {
-	width: 8px;
+.scrollbar::-webkit-scrollbar {
+    height: 8px; 
 }
 
-::-webkit-scrollbar-track {
-	background: #555;
+.scrollbar::-webkit-scrollbar-track {
+    background: #555; 
 }
 
-::-webkit-scrollbar-thumb {
-	background: #121212;
-	border-radius: 5px;
+.scrollbar::-webkit-scrollbar-thumb {
+    background: #121212;
+    border-radius: 5px; 
 }
 
-::-webkit-scrollbar-thumb:hover {
-	background: #242424;
+.scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #242424;
 }
 
-/* SHAKE ANIMATION ON HORIZONTAL DIRECTION */
+.scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #1d232a transparent; 
+}
+
 .shake {
 	animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) 0.2s both;
 	transform: translate3d(0, 0, 0);

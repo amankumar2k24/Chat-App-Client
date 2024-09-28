@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
 import Message from "./Message";
-import useListenMessages from "../../unused-hooks/useListenMessages";
+import useListenMessages from "../../utils/useListenMessages";
 import useConversation from "@/zustand/useConversation";
 import { useGetUsersMessageQuery } from "@/lib/hooks/userHooks";
 
@@ -9,7 +9,7 @@ const Messages = () => {
   const { selectedConversation, messages, setMessages } = useConversation();
 
   const onGetUserMessageSuccess = (data) => {
-    setMessages(data?.result);
+    setMessages(data?.result || []);
   };
 
   const onGetUserMessageError = (error) => {
@@ -17,7 +17,7 @@ const Messages = () => {
   };
 
   const { data, loading } = useGetUsersMessageQuery(
-    selectedConversation._id,
+    selectedConversation?._id,
     onGetUserMessageSuccess,
     onGetUserMessageError
   );
@@ -31,6 +31,9 @@ const Messages = () => {
     }, 100);
   }, [messages]);
 
+  // Check if messages is an array before mapping
+  // const isMessagesArray = Array.isArray(messages);
+
   return (
     <div className="px-4 flex-1 overflow-auto">
       {!loading &&
@@ -43,7 +46,9 @@ const Messages = () => {
 
       {loading && [...Array(3)].map((_, idx) => <MessageSkeleton key={idx} />)}
       {!loading && messages?.length === 0 && (
-        <p className="text-center">Send a message to start the conversation</p>
+        <p className="text-center text-[12px] h-full flex justify-center items-center md:text-[16px]">
+          Send a message to start the conversation
+        </p>
       )}
     </div>
   );

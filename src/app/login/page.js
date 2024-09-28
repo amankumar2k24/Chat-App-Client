@@ -12,13 +12,15 @@ import toast from "react-hot-toast";
 
 const Login = () => {
   const [togglePassword, setTogglePassword] = useState(false);
-  const { authUser, setAuthUser } = useContext(AuthContext);
+  const { authUser, setAuthUser, setHideSideBar } = useContext(AuthContext);
   const router = useRouter();
 
   const onUserLoginSuccess = (data) => {
-    localStorage.setItem("chat-user", JSON.stringify(data));
-    setAuthUser(data);
+    // console.log(data, "data");
+    localStorage.setItem("chat-user", JSON.stringify(data.data));
+    setAuthUser(data.data);
     router.push("/");
+    setHideSideBar(false);
     toast.success(data?.data?.message);
   };
 
@@ -61,9 +63,9 @@ const Login = () => {
   });
 
   return (
-    <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
+    <div className="flex flex-col items-center justify-center w-auto sm:min-w-96 mx-auto">
       <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
-        <h1 className="text-3xl font-semibold text-center text-gray-300">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-center text-gray-300">
           Login
           <span className="text-blue-500"> ChatApp</span>
         </h1>

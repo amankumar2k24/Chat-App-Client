@@ -1,11 +1,12 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Conversation from "./Conversation";
 import { getRandomEmoji } from "@/utils/emojis";
 import { useGetUsersConversationQuery } from "@/lib/hooks/userHooks";
+import AuthContext from "@/context/AuthContext";
 
 const Conversations = () => {
-  const [conversations, setConversations] = useState([]);
+  const { conversations, setConversations } = useContext(AuthContext);
 
   const onGetUserConversationSuccess = (data) => {
     setConversations(data);
@@ -21,7 +22,7 @@ const Conversations = () => {
   );
 
   return (
-    <div className="py-2 flex flex-col overflow-auto">
+    <div className="py-2 flex flex-col overflow-auto scrollbar">
       {isLoading ? (
         <span className="loading loading-spinner mx-auto"></span>
       ) : conversations.length > 0 ? (

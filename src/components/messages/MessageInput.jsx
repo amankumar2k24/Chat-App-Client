@@ -8,11 +8,11 @@ import { useMutation } from "react-query";
 
 const MessageInput = () => {
   const { selectedConversation, messages, setMessages } = useConversation();
-  console.log("selectedConversation=>", selectedConversation);
+  // console.log("selectedConversation=>", selectedConversation);
 
   const onSuccess = (data) => {
-    console.log("data from onsuccess=>", data);
     setMessages([...messages, data.result]);
+    resetForm();
   };
   const onError = (error) => {
     console.log(error);
@@ -26,7 +26,7 @@ const MessageInput = () => {
     }
   );
 
-  const { values, handleChange, handleSubmit } = useFormik({
+  const { values, handleChange, handleSubmit, resetForm } = useFormik({
     initialValues: {
       message: "",
     },

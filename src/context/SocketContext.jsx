@@ -17,11 +17,11 @@ export const SocketContextProvider = ({ children }) => {
   useEffect(() => {
     if (authUser) {
       const socket = io("http://localhost:8000", {
-        query: { userId: authUser.data.result._id },
+        query: { userId: authUser?.result?._id },
       });
       setSocket(socket);
 
-      console.log("Socket connected:", socket.connected);
+      // console.log("Socket connected:", socket.connected);
 
       //socket.on() is used to listen to the event emitted by the server
       socket.on("getOnlineUsers", (users) => {

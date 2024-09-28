@@ -36,13 +36,11 @@ export const useGetUsersMessageQuery = (data, onSuccess, onError) => {
 };
 
 export const sendUserConversation = async ({ message, id }) => {
-  console.log("id coming from sendUserConversationQuery", id);
   const response = await axiosInterceptor.post(
     `${process.env.NEXT_PUBLIC_API_URL}/message/send-message/${id}`,
     { message },
     { withCredentials: true }
   );
 
-  console.log("response from sendUserConversationQuery", response);
   return response.data;
 };

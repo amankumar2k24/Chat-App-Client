@@ -3,13 +3,13 @@ import { useContext, useState } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 import toast from "react-hot-toast";
 import useConversation from "@/zustand/useConversation";
-import useGetConversations from "@/unused-hooks/useGetConversations";
 import AuthContext from "@/context/AuthContext";
 
 const SearchInput = () => {
   const [search, setSearch] = useState("");
   const { setSelectedConversation } = useConversation();
-  const { conversations  } = useContext(AuthContext);
+  const { conversations } = useContext(AuthContext);
+  // console.log("conversations", conversations);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,6 +20,7 @@ const SearchInput = () => {
     const conversation = conversations.find((c) =>
       c.fullName.toLowerCase().includes(search.toLowerCase())
     );
+    console.log("conversation 2", conversation);
     if (conversation) {
       setSelectedConversation(conversation);
       setSearch("");
