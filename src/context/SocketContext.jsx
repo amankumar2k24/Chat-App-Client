@@ -14,10 +14,14 @@ export const SocketContextProvider = ({ children }) => {
 
   console.log("authUser from socketio", authUser);
 
+  const socketURL =
+    process.env.NODE_ENV === "production"
+      ? "https://chat-app-server-hupu.onrender.com/api/v1"
+      : "http://localhost:8000/api/v1";
+
   useEffect(() => {
     if (authUser) {
-      // const socket = io("https://chat-app-server-hupu.onrender.com/api/v1", {
-      const socket = io(`${process.env.NEXT_PUBLIC_API_URL}`, {
+      const socket = io(socketURL, {
         query: { userId: authUser?.result?._id },
       });
       setSocket(socket);
