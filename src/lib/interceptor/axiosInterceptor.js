@@ -11,13 +11,16 @@ const axiosInterceptor = axios.create({
 // Add a request interceptor
 axiosInterceptor.interceptors.request.use(
   (config) => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("jwt="));
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token.split("=")[1]}`;
+    }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
-
 
 axiosInterceptor.interceptors.response.use(
   (response) => {
