@@ -16,7 +16,7 @@ axiosInterceptor.interceptors.request.use(
       .find((row) => row.startsWith("jwt="));
     if (token) {
       config.headers["Authorization"] = `Bearer ${token.split("=")[1]}`;
-    }
+    } 
     return config;
   },
   (error) => Promise.reject(error)
