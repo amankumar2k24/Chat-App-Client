@@ -5,6 +5,7 @@ import useConversation from "@/zustand/useConversation";
 import { useContext } from "react";
 
 const Message = ({ message }) => {
+  console.log("message=>", message);
   const { authUser } = useContext(AuthContext);
   const { selectedConversation } = useConversation();
   const fromMe = message.senderId === authUser?.result?._id;
