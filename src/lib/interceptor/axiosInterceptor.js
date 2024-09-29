@@ -8,6 +8,9 @@ const axiosInterceptor = axios.create({
   withCredentials: true, // Include cookies with requests
 });
 
+// Request interceptor for API calls
+axiosInterceptor.defaults.headers.common["Content-Type"] = "application/json";
+
 // Add a request interceptor
 axiosInterceptor.interceptors.request.use(
   (config) => {
@@ -16,7 +19,7 @@ axiosInterceptor.interceptors.request.use(
       .find((row) => row.startsWith("jwt="));
     if (token) {
       config.headers["Authorization"] = `Bearer ${token.split("=")[1]}`;
-    } 
+    }
     return config;
   },
   (error) => Promise.reject(error)
