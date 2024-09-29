@@ -13,13 +13,10 @@ export const SocketContextProvider = ({ children }) => {
   const { authUser } = useContext(AuthContext);
 
   // console.log("authUser from socketio", authUser);
-  const socketURL =
-    "http://localhost:8000" ||
-    "https://chat-app-server-q5nw.onrender.com/api/v1";
 
   useEffect(() => {
     if (authUser) {
-      const socket = io(socketURL, {
+      const socket = io("https://chat-app-server-hupu.onrender.com/api/v1", {
         // const socket = io(socketURL, {
         query: { userId: authUser?.result?._id },
       });
