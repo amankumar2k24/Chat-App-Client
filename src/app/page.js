@@ -15,6 +15,14 @@ const Home = () => {
       router.push("/login");
     }
 
+    // Set the Authorization header if the token exists
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      axiosInterceptor.defaults.headers[
+        "Authorization"
+      ] = `Bearer ${storedToken}`;
+    }
+
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
