@@ -2,7 +2,6 @@
 import { sendUserConversation } from "@/lib/hooks/userHooks";
 import useConversation from "@/zustand/useConversation";
 import { useFormik } from "formik";
-import { useState } from "react";
 import { BsSend } from "react-icons/bs";
 import { useMutation } from "react-query";
 
