@@ -7,7 +7,6 @@ import { SocketContext } from "@/context/SocketContext";
 const useListenMessages = () => {
   const { socket } = useContext(SocketContext);
   const { messages, setMessages } = useConversation();
-  // console.log("messages=>", messages);
 
   useEffect(() => {
     socket?.on("newMessage", (newMessage) => {

@@ -7,7 +7,6 @@ import AuthContext from "@/context/AuthContext";
 
 const Conversations = () => {
   const { conversations, setConversations } = useContext(AuthContext);
-  console.log("conversations=>", conversations);
 
   const onGetUserConversationSuccess = (data) => {
     setConversations(data);

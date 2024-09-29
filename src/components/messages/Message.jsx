@@ -9,8 +9,6 @@ const Message = ({ message }) => {
   const { selectedConversation } = useConversation();
   const fromMe = message.senderId === authUser?.result?._id;
 
-  console.log("fromMe", message.senderId);
-  console.log("authUser", authUser?.result?._id);
   const formattedTime = extractTime(message.createdAt);
   const chatClassName = fromMe ? "chat-end" : "chat-start";
   const profilePic = fromMe

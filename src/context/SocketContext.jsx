@@ -12,12 +12,12 @@ export const SocketContextProvider = ({ children }) => {
 
   const { authUser } = useContext(AuthContext);
 
-  console.log("authUser from socketio", authUser);
+  // console.log("authUser from socketio", authUser);
 
   const socketURL =
     process.env.NODE_ENV === "production"
-      ? "https://chat-app-server-hupu.onrender.com/api/v1"
-      : "http://localhost:8000/api/v1";
+      ? "https://chat-app-server-hupu.onrender.com"
+      : "http://localhost:8000";
 
   useEffect(() => {
     if (authUser) {
@@ -26,7 +26,7 @@ export const SocketContextProvider = ({ children }) => {
       });
       setSocket(socket);
 
-      console.log("Socket connected:", socket.connected);
+      // console.log("Socket connected:", socket.connected);
 
       //socket.on() is used to listen to the event emitted by the server
       socket.on("getOnlineUsers", (users) => {

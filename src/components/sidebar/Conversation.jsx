@@ -18,7 +18,6 @@ const Conversation = ({ conversation, lastIdx, emoji }) => {
     if (window.innerWidth < 768) {
       setHideSideBar(true);
     }
-    console.log("Selected conversation:", conversation); // Debug log
   };
 
   return (
