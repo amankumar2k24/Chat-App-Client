@@ -32,9 +32,9 @@ const MessageContainer = () => {
             </div>
             <div
               onClick={() => setHideSideBar(false)}
-              className="cursor-pointer"
+              className="cursor-pointer bg-[#1d232a] p-[4px] rounded-full"
             >
-              <TiArrowBack size={20} />
+              <TiArrowBack size={16} />
             </div>
           </div>
           <Messages />

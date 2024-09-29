@@ -8,7 +8,7 @@ import AuthContext from "@/context/AuthContext";
 const SearchInput = () => {
   const [search, setSearch] = useState("");
   const { setSelectedConversation } = useConversation();
-  const { conversations } = useContext(AuthContext);
+  const { conversations, setConversations } = useContext(AuthContext);
   // console.log("conversations", conversations);
 
   const handleSubmit = (e) => {
@@ -17,11 +17,12 @@ const SearchInput = () => {
     if (search.length < 3) {
       return toast.error("Search term must be at least 3 characters long");
     }
-    const conversation = conversations.find((c) =>
+    const conversation = conversations.filter((c) =>
       c.fullName.toLowerCase().includes(search.toLowerCase())
     );
     console.log("conversation 2", conversation);
     if (conversation) {
+      setConversations(conversation);
       setSelectedConversation(conversation);
       setSearch("");
     } else toast.error("No such user found!");
