@@ -8,6 +8,7 @@ export const useUserLogin = async ({ formData }) => {
     formData,
     { withCredentials: true }
   );
+  console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
   return response;
 };
 
