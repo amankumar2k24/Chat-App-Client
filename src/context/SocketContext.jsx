@@ -19,7 +19,7 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (authUser) {
-      const socket = io(socker, {
+      const socket = io(socketURL, {
         // const socket = io(socketURL, {
         query: { userId: authUser?.result?._id },
       });
