@@ -35,11 +35,11 @@ const Home = () => {
         {isMobile ? (
           <>
             {hideSideBar ? (
-              <div className="flex h-[450px] md:h-[550px]">
+              <div className="flex h-[450px] md:h-[550px] ">
                 <MessageContainer />
               </div>
             ) : (
-              <div className="flex h-[450px] md:h-[550px]">
+              <div className="flex h-[450px] md:h-[550px] ">
                 <Sidebar />
               </div>
             )}

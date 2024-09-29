@@ -14,7 +14,7 @@ const Sidebar = () => {
   );
 
   return (
-    <div className="border-r border-slate-500 p-4 flex flex-col">
+    <div className="border-r border-slate-500 p-4 flex flex-col  h-[450px] md:h-[550px] ">
       <SearchInput />
       <div className="divider px-3 text-[#1d232a] font-bold">
         Online User:
